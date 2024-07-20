@@ -1,3 +1,17 @@
+--[[
+    A lua script to load local damaku files (.xml) for mpv
+    Available at: https://github.com/dyphire/mpv-load-danmaku
+
+    `script-message load-danmaku true <xml_path>`
+
+        load the given path of danmaku file (.xml)
+    
+    `you can add bindings to input.conf`
+
+        key        script-message-to load-danmaku load-local-danmaku
+        key        script-message-to load-danmaku toggle-local-danmaku
+]]
+
 local msg = require 'mp.msg'
 local utils = require 'mp.utils'
 local options = require 'mp.options'
@@ -80,13 +94,13 @@ local function load_danmaku(danmaku_file)
 end
 
 -- danmaku xml2ass
-local function danmaku2ass(force)
+local function danmaku2ass(force, danmaku_xml)
     if not force and not o.autoload then return end
     local path = mp.get_property("path")
     if not path or path:find('^%a[%w.+-]-://') then return end
     local dir = utils.split_path(path)
     local fliename = mp.get_property('filename/no-ext')
-    local danmaku_xml = utils.join_path(dir, fliename .. ".xml")
+    if danmaku_xml == nil then danmaku_xml = utils.join_path(dir, fliename .. ".xml") end
     if not file_exists(danmaku_xml) then return end
 
     local directory = utils.split_path(os.tmpname())
@@ -146,7 +160,9 @@ function asstoggle()
 end
 
 mp.add_key_binding(nil, 'toggle-local-danmaku', asstoggle)
-mp.add_key_binding(nil, 'loade-local-danmaku', danmaku2ass(true))
+mp.add_key_binding(nil, 'load-local-danmaku', danmaku2ass(true))
+mp.register_script_message('load-danmaku', danmaku2ass)
+
 mp.register_event("file-loaded", danmaku2ass)
 mp.register_event("end-file", function()
     asstoggle()
