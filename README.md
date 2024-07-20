@@ -8,9 +8,28 @@ This is a lua script for mpv player. It will load danmaku files (`.xml`) of the 
 
 Need [DanmakuFactory](https://github.com/hihkm/DanmakuFactory) to be installed or explicitly specified.
 
+## Usage
+
+### Keybinds
+
+You can add bindings to input.conf:
+```ini
+key        script-message-to load-danmaku load-local-danmaku
+key        script-message-to load-danmaku toggle-local-danmaku
+```
+
+### Script message
+
+#### load-danmaku
+
+`script-message load-danmaku true <xml_path>`
+
+Allows loading of danmaku by passing the path to a given danmaku file (.xm) with a script-message.
+
 ## Todo
 
-- [ ] Consider using osd-overlay for rendering danmaku?
+- [ ] consider using osd-overlay for rendering danmaku?
+- [x] add script-message support
 
 ## Acknowledgement
 
