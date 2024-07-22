@@ -29,7 +29,7 @@ local o = {
     --字体
     fontname = "Microsoft YaHei",
     --大小 
-    fontsize = "40",
+    fontsize = "50",
     --透明度(1-255)  255 为不透明
     opacity = "150",
     --阴影
@@ -39,7 +39,7 @@ local o = {
     --弹幕密度 整数(>=-1) -1：表示不重叠 0：表示无限制 其他表示限定条数
     density = "0.0",
     --全部弹幕的显示范围(0.0-1.0)
-    displayarea = "0.8",
+    displayarea = "0.85",
     --描边 0-4
     outline = "1",
 }
@@ -64,14 +64,9 @@ end
 local function file_exists(path)
     if path then
         local meta = utils.file_info(path)
-        if meta and meta.is_file then
-            return true
-        else
-            return false
-        end
-    else
-        return false
+        return meta and meta.is_file
     end
+    return false
 end
 
 -- load danmaku
