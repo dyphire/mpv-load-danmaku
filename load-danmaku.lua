@@ -2,7 +2,7 @@
     A lua script to load local damaku files (.xml) for mpv
     Available at: https://github.com/dyphire/mpv-load-danmaku
 
-    `script-message load-danmaku true <xml_path>`
+    `script-message load-danmaku input <xml_path>`
 
         load the given path of danmaku file (.xml)
     
