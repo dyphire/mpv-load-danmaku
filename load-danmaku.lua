@@ -47,6 +47,7 @@ local o = {
 options.read_options(o, _, function() end)
 
 local danmaku_file = nil
+local danmaku_open = false
 local sec_sub_visibility = mp.get_property_native("secondary-sub-visibility")
 local sec_sub_ass_override = mp.get_property_native("secondary-sub-ass-override")
 
@@ -73,6 +74,7 @@ end
 local function load_danmaku(danmaku_file)
     if not file_exists(danmaku_file) then return end
     msg.info("成功挂载本地弹幕文件")
+    danmaku_open = true
     -- 如果可用将弹幕挂载为次字幕
     if sec_sub_ass_override then
         mp.commandv("sub-add", danmaku_file, "auto")
@@ -133,25 +135,33 @@ local function danmaku2ass(force, danmaku_xml)
 end
 
 -- toggle function
-function asstoggle()
+function asstoggle(event)
     if not file_exists(danmaku_file) then return end
-    local sec_visibility = mp.get_property_bool("secondary-sub-visibility")
-    if sec_sub_ass_override and sec_visibility then
+    if danmaku_open then
         msg.debug("隐藏本地弹幕")
-        mp.set_property_native("secondary-sub-visibility", false)
-        return
-    elseif sec_sub_ass_override == nil then
-        -- if exists @danmaku filter， remove it
-        for _, f in ipairs(mp.get_property_native('vf')) do
-            if f.label == 'danmaku' then
-                msg.debug("卸载本地弹幕")
-                mp.commandv('vf', 'remove', '@danmaku')
-                return
+        danmaku_open = false
+        if sec_sub_ass_override then
+            if event then
+                mp.set_property_native("secondary-sub-visibility", sec_sub_visibility)
+            else
+                mp.set_property_native("secondary-sub-visibility", false)
+            end
+            mp.set_property_native("secondary-sub-ass-override", sec_sub_ass_override)
+            return
+        elseif sec_sub_ass_override == nil then
+            -- if exists @danmaku filter， remove it
+            for _, f in ipairs(mp.get_property_native('vf')) do
+                if f.label == 'danmaku' then
+                    mp.commandv('vf', 'remove', '@danmaku')
+                    return
+                end
             end
         end
     end
     -- otherwise, load danmaku
-    if file_exists(danmaku_file) then load_danmaku(danmaku_file) end
+    if not event and file_exists(danmaku_file) then
+        load_danmaku(danmaku_file)
+    end
 end
 
 mp.add_key_binding(nil, 'toggle-local-danmaku', asstoggle)
@@ -160,12 +170,8 @@ mp.register_script_message('load-danmaku', danmaku2ass)
 
 mp.register_event("file-loaded", danmaku2ass)
 mp.register_event("end-file", function()
-    asstoggle()
+    asstoggle(true)
     if file_exists(danmaku_file) then
         os.remove(danmaku_file)
-    end
-    if sec_sub_ass_override then
-        mp.set_property_native("secondary-sub-visibility", sec_sub_visibility)
-        mp.set_property_native("secondary-sub-ass-override", sec_sub_ass_override)
     end
 end)
