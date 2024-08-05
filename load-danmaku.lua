@@ -27,7 +27,7 @@ local o = {
     --速度
     scrolltime = "12",
     --字体
-    fontname = "Microsoft YaHei",
+    fontname = "sans-serif",
     --大小 
     fontsize = "50",
     --透明度(1-255)  255 为不透明
@@ -100,7 +100,8 @@ local function danmaku2ass(force, danmaku_xml)
     if danmaku_xml == nil then danmaku_xml = utils.join_path(dir, fliename .. ".xml") end
     if not file_exists(danmaku_xml) then return end
 
-    local directory = utils.split_path(os.tmpname())
+    -- get danmaku directory
+    local directory = os.getenv("TEMP") or "/tmp/"
     danmaku_file = utils.join_path(directory, "danmaku.ass")
 
     local arg = { mp.command_native({ "expand-path", o.DanmakuFactory_Path }),
