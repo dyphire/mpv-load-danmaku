@@ -24,7 +24,7 @@ key        script-message-to load-danmaku toggle-local-danmaku
 
 `script-message load-danmaku input <xml_path>`
 
-Allows loading of danmaku by passing the path to a given danmaku file (.xm) with a script-message.
+Allows loading of danmaku by passing the path to a given danmaku file (.xml) with a script-message.
 
 ## Todo
 
