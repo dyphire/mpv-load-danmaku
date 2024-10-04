@@ -42,6 +42,8 @@ local o = {
     displayarea = "0.85",
     --描边 0-4
     outline = "1",
+    --指定弹幕屏蔽词文件，black.txt。文件内容以换行分隔
+    blacklist = "",
 }
 
 options.read_options(o, _, function() end)
@@ -96,8 +98,8 @@ local function danmaku2ass(force, danmaku_xml)
     local path = mp.get_property("path")
     if not path or path:find('^%a[%w.+-]-://') then return end
     local dir = utils.split_path(path)
-    local fliename = mp.get_property('filename/no-ext')
-    if danmaku_xml == nil then danmaku_xml = utils.join_path(dir, fliename .. ".xml") end
+    local filename = mp.get_property('filename/no-ext')
+    if danmaku_xml == nil then danmaku_xml = utils.join_path(dir, filename .. ".xml") end
     if not file_exists(danmaku_xml) then return end
 
     -- get danmaku directory
