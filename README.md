@@ -1,4 +1,4 @@
-# Note: replaced by: https://github.com/dyphire/uosc_danmaku
+# Note: replaced by: [uosc_danmaku](https://github.com/dyphire/uosc_danmaku)
 
 # mpv-load-danmaku
 
