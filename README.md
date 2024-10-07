@@ -1,3 +1,5 @@
+# Note: replaced by: https://github.com/dyphire/uosc_danmaku
+
 # mpv-load-danmaku
 
 ## Description
